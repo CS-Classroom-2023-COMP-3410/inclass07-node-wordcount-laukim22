@@ -1,5 +1,13 @@
+const fs = require('fs');
+const chalk = require('chalk');
+const { nodeInternals } = require('stack-utils');
+///copilot
+
+//needed to install chalk@4 version
+
 // TODO: Import required modules
 // Hint: You will need the 'fs' module for reading the file and the 'chalk' library for coloring the words.
+
 
 /**
  * Synchronously reads the content of 'declaration.txt'.
@@ -7,6 +15,7 @@
  */
 function readFileContent() {
     // TODO: Use the 'fs' module to synchronously read the content of 'declaration.txt' and return it.
+    return fs.readFileSync('declaration.txt', 'utf8'); //added by github copilot
 }
 
 /**
@@ -20,6 +29,16 @@ function getWordCounts(content) {
     const wordCount = {};
     const words = content.split(/\W+/).filter(Boolean); // Splitting by non-word characters.
 
+    for (const word of words) {
+        const lowerCaseWord = word.toLowerCase();
+        if (wordCount[lowerCaseWord]) {
+            wordCount[lowerCaseWord]++;
+        } else {
+            wordCount[lowerCaseWord] = 1;
+        }
+    }
+
+    return wordCount; ///added by copilot
 }
 
 /**
@@ -34,6 +53,14 @@ function colorWord(word, count) {
     // - Words that occur once can be blue
     // - Words that occur between 2 and 5 times can be green
     // - Words that occur more than 5 times can be red
+
+    if (count === 1) {
+        return chalk.blue(word);
+    } else if (count >= 2 && count <= 5) {
+        return chalk.green(word);
+    } else {
+        return chalk.red(word);
+    } //added by copilot
 }
 
 /**
@@ -47,6 +74,9 @@ function printColoredLines(content, wordCount) {
     for (const line of lines) {
         const coloredLine = line.split(/\W+/).map(word => {
             // TODO: Color the word based on its frequency using the 'colorWord' function.
+            const lowerCaseWord = word.toLowerCase();
+            const count = wordCount[lowerCaseWord] || 0;
+            return colorWord(word, count); //copilot
         }).join(' ');
 
         console.log(coloredLine);
@@ -69,3 +99,14 @@ if (require.main === module) {
 
 // TODO: Export the functions for testing
 // Hint: You can use the 'module.exports' syntax.
+
+module.exports = {
+    readFileContent,
+    getWordCounts,
+    colorWord,
+    printColoredLines,
+    processFile
+}; //copilot
+
+
+// ran node app.js
